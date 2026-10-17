@@ -64,6 +64,18 @@ const CHARACTERS = [
   {short:"Ночной клуб",initial:0,reactions:["Поверьте, сейчас так лучше.","Там человека поддерживают. Не мешайте.","Замок был с нами в начале вечера.","Это не я. Это коктейль номер шесть.","Мы же все немного сломаны к утру."],after:{positive:"Ты лучший. Я серьёзно. Обнимемся?",negative:"А я думал, мы подружились.",neutral:"Ты сам-то понял, что сказал?"},final:{innocent:"Продолжаем! Только сначала уборка.",guilty:"Ладно. Мне давно нужна была пауза.",fired:"Адвокат потерялся. Кто-нибудь видел адвоката?"}}
 ];
 
+// Отдельный атлас каждого клиента: 2 × 2, уверенный / тревожный / радостный / потрясённый.
+const CLIENT_ART = [
+  {file:"01-restaurant.png",description:"Мраморный аристократ с моноклем, усами и золотой отделкой"},
+  {file:"02-diner.png",description:"Потрёпанный старожил с трещинами, заплатками и вантузом"},
+  {file:"03-mall.png",description:"Гладкий футуристичный туалет с датчиком и корпоративной улыбкой"},
+  {file:"04-station.png",description:"Стальной ветеран в фуражке, с седыми усами и цепочкой часов"},
+  {file:"05-office.png",description:"Уставший офисный сотрудник в очках, с галстуком и бейджем"},
+  {file:"06-festival.png",description:"Помятая фестивальная кабинка в наушниках и браслетах"},
+  {file:"07-coffee.png",description:"Терракотовый эстет в шапке и круглых очках, с сухоцветами"},
+  {file:"08-club.png",description:"Клубный тусовщик с цепью, косой улыбкой и расширенными зрачками"}
+];
+
 function decideVerdict(scores) {
   if (scores.neutral > scores.positive && scores.neutral > scores.negative) return "fired";
   return scores.positive >= scores.negative ? "innocent" : "guilty";
@@ -135,8 +147,19 @@ if (typeof document !== "undefined") {
     else window.scrollTo({top:0,behavior:"instant"});
   }
   function sprite(id,column,row,label) {
-    $(id).style.backgroundPosition=`${column*100/3}% ${row*100}%`;
-    $(id).setAttribute("aria-label",label);
+    const portrait=$(id);
+    if(row===1){
+      const art=CLIENT_ART[caseIndex];
+      portrait.style.backgroundImage=`url("./assets/clients/${art.file}")`;
+      portrait.style.backgroundSize="200% 200%";
+      portrait.style.backgroundPosition=`${(column%2)*100}% ${Math.floor(column/2)*100}%`;
+      portrait.setAttribute("aria-label",`${label}. ${art.description}`);
+    }else{
+      portrait.style.backgroundImage='url("./assets/court-portraits.png")';
+      portrait.style.backgroundSize="400% 200%";
+      portrait.style.backgroundPosition=`${column*100/3}% 0%`;
+      portrait.setAttribute("aria-label",label);
+    }
   }
   function openArchive() {
     clearTimeout(introTimer);
@@ -262,6 +285,6 @@ if (typeof document !== "undefined") {
   $("restart").addEventListener("click",openArchive);
   introTimer=setTimeout(advanceIntro,sceneDuration);
 }
-if(typeof module!=="undefined")module.exports={CASES,CHARACTERS,decideVerdict,shuffle};
+if(typeof module!=="undefined")module.exports={CASES,CHARACTERS,CLIENT_ART,decideVerdict,shuffle};
 
 

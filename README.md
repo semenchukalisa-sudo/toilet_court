@@ -1,4 +1,4 @@
-# Суд над туалетом — версия 4 — мобильная
+# Суд над туалетом — версия 9: восемь персонажей
 
 Готовая сатирическая миниигра на русском языке. HTML, CSS и JavaScript, без сервера, сборки, библиотек, внешних шрифтов и платных сервисов. Работает офлайн после распаковки. GitHub нужен только для публикации по общедоступной ссылке.
 
@@ -19,7 +19,9 @@
 - `style.css` — адаптивное оформление для телефона и компьютера.
 - `script.js` — восемь подсудимых, 40 вопросов, 120 ответов и логика игры.
 - `README.md` — эта инструкция.
-- `assets/court-portraits.png` — пиксельные портреты судьи и туалета, по четыре эмоции на персонажа. Обязательно сохраняйте вложенную папку.
+- `assets/court-portraits.png` — изображения судьи; используется верхний ряд.
+- `assets/clients/` — восемь отдельных персонажей, у каждого четыре выражения лица. Обязательно сохраняйте обе вложенные папки.
+- `ARTWORK.md` — описания и точные запросы, использованные для создания новых изображений.
 
 ## Правила
 
@@ -38,7 +40,7 @@
 1. Зарегистрируйтесь или войдите на [GitHub](https://github.com).
 2. Нажмите **+ → New repository**. Назовите репозиторий `toilet-court`, выберите **Public** и создайте его (**Create repository**). В публичном репозитории исходный код будет виден всем.
 3. На странице пустого репозитория нажмите **uploading an existing file**. Если файлы уже есть, используйте **Add file → Upload files**.
-4. Перетащите четыре файла **и папку `assets`** из распакованной папки. Не загружайте ZIP или внешнюю папку целиком: `index.html` должен лежать в корне репозитория, изображение — по пути `assets/court-portraits.png`.
+4. Перетащите файлы **и всю папку `assets`** из распакованной папки. Не загружайте ZIP или внешнюю папку целиком: `index.html` должен лежать в корне репозитория, изображения — внутри `assets`, новые персонажи — внутри `assets/clients`.
 5. Нажмите **Commit changes**. Если GitHub предлагает имя основной ветки, используйте `main`.
 6. Откройте **Settings → Pages**. В разделе **Build and deployment** выберите **Source → Deploy from a branch**.
 7. В **Branch** выберите `main`, рядом — **/(root)**, затем **Save**.
@@ -51,7 +53,7 @@
 
 - **404:** дождитесь успешной публикации во вкладке Actions; проверьте `main` и `/(root)`, точное имя `index.html` и адрес с названием репозитория.
 - **Нет оформления или кнопки не работают:** убедитесь, что `style.css` и `script.js` лежат рядом с `index.html`, имена не изменились и не получили расширение `.txt`.
-- **Не видно персонажей:** проверьте, что папка `assets` загружена рядом с `index.html` и содержит `court-portraits.png`. Важны точные имена и регистр букв.
+- **Не видно персонажей:** проверьте, что папка `assets` загружена рядом с `index.html` и содержит `court-portraits.png` и папку `clients` с восемью изображениями. Важны точные имена и регистр букв.
 - **После изменений видна старая версия:** дождитесь нового запуска Pages и обновите страницу с Ctrl+F5 (на Mac — Cmd+Shift+R).
 - **Нет ветки main в списке:** сначала загрузите файлы и сохраните изменения через Commit changes.
 
@@ -59,19 +61,34 @@
 
 В `script.js` массив `CASES` содержит карточки клиентов. Поля `name`, `personality`, `quote`, `charge`, `evidence` отвечают за досье. Каждая строка `questions` состоит из четырёх строк: вопрос, положительный ответ, отрицательный, нейтральный. Сохраняйте пять вопросов на клиента. `CHARACTERS` содержит характерные реплики в том же порядке, что `CASES`: `reactions` — ответы на пять вопросов, `after` — реакции на выбор игрока, `final` — финальные реплики. `ANGER` содержит реакции судьи, `ENDINGS` — приговоры. Не удаляйте кавычки, запятые и скобки; перед загрузкой откройте изменённый сайт локально.
 
-В начале `style.css` переменные `--bg`, `--surface`, `--text`, `--blue` и `--red` задают цвета. В `index.html` можно менять заголовки. Картинка с персонажами — таблица 4 × 2: верхний ряд — судья, нижний — туалет. Нужное выражение выбирается через CSS `background-position`, без дополнительных загрузок.
+В начале `style.css` переменные `--bg`, `--surface`, `--text`, `--blue` и `--red` задают цвета. В `index.html` можно менять заголовки. Массив `CLIENT_ART` в `script.js` связывает дела с изображениями в `assets/clients`. Каждое новое изображение — таблица 2 × 2: сверху слева — обычное выражение, сверху справа — тревога, снизу слева — радость, снизу справа — потрясение. Нужное выражение выбирается через CSS `background-position`, без дополнительной загрузки файла. Судья использует верхний ряд прежней таблицы 4 × 2.
 
 Для обновления опубликованной игры загрузите изменённые файлы и папку `assets` в тот же репозиторий через **Add file → Upload files → Commit changes**. Pages обновится автоматически.
 
 ## Проверено локально
 
+Для версии 9 повторно проверены все восемь наборов изображений, 24 полных прохождения и 120 смен эмоций. У каждого клиента его изображение сохраняется в досье, во время слушания и в финале; судья использует прежний набор эмоций. Проверены загрузка файлов и отсутствие горизонтальной прокрутки при ширине 320, 390 и 844 пикселя, а полные прохождения — при ширине 1440 пикселей. Ошибок JavaScript и пропавших изображений не обнаружено.
+
 В браузере Microsoft Edge: три этапа вступления и пропуск; восемь доступных дел без подсказок о клиентах; 24 полных прохождения (каждый клиент × три исхода); 120 выборов ответа; реакции и гнев; повторное открытие архива. Дополнительно проверены все 243 сочетания ответов, управление клавиатурой, отсутствие ошибок JavaScript и горизонтальной прокрутки на ширинах 320, 375, 768, 1024 и 1440 пикселей. Это проверка адаптивных размеров браузера, а не тест на физических телефонах. При системной настройке уменьшения движения анимации отключаются, вступление продолжает работать.
 
 ## Портреты
 
-Изображение `assets/court-portraits.png` создано встроенным инструментом ImageGen. Прозрачная таблица 1774 × 887 пикселей отображается на тёмном фоне сайта. Это один набор выражений судьи и один набор выражений туалета; восемь клиентов различаются характером, делом и репликами, а не отдельными моделями портретов.
+В версии 9 у каждого дела собственный персонаж. Меняются корпус, силуэт, материал, аксессуары и лицо. Каждый сохраняет свою внешность на экранах дела, слушания и приговора; четыре эмоции соответствуют ходу заседания.
 
-Использованный запрос:
+| Дело | Приметы |
+| --- | --- |
+| 01 · Элитный ресторан | Тёмный мрамор, золотая отделка, монокль и бабочка |
+| 02 · Забегаловка | Пожелтевшая керамика, трещины, заплатки и вантуз |
+| 03 · Торговый центр | Округлый современный корпус, датчик и служебная улыбка |
+| 04 · Вокзал | Стальной корпус, фуражка, седые усы и цепочка часов |
+| 05 · Офис | Угловатый бачок, очки, галстук, бейдж и усталый взгляд |
+| 06 · Фестиваль | Целая пластиковая кабинка, наушники и фестивальные браслеты |
+| 07 · Кофейня | Терракотовая керамика, шапка, круглые очки и сухоцветы |
+| 08 · Ночной клуб | Тёмный наклонённый корпус, цепь, расфокусированный взгляд и расширенные зрачки |
+
+Все восемь новых таблиц эмоций созданы встроенным инструментом ImageGen. Точные запросы и имена файлов сохранены в [ARTWORK.md](ARTWORK.md). Изображение судьи `assets/court-portraits.png` также создано ImageGen; оно сохранено из предыдущей версии, используется только верхний ряд.
+
+Исходный запрос для изображения судьи:
 
 > Use case: stylized-concept. Asset type: CSS sprite atlas for retro noir courtroom game. Create exactly one 2048x1024 landscape image, a regular four-column by two-row sprite atlas with eight equal 512x512 square cells. No visible grid lines. Each cell has the exact same flat solid #171819 background, with no scenery, text or border. Top row: Four waist-up portraits of the SAME stern middle-aged male judge with swept grey hair, dark judicial robe and white collar. Identical character proportions, view, scale, centered position and lighting across four cells. Left to right emotions: (1) calm stern neutral; (2) annoyed with raised eyebrow; (3) angry with one clenched fist; (4) furious yelling with both hands on a small desk edge. Keep all head and hands fully inside their own cell, ample empty margins. Bottom row: Four portraits of the SAME anthropomorphic modern ivory ceramic toilet, with the tank forming its expressive face with eyes and mouth, whole toilet in front three-quarter view. Same exact design, camera, scale and centered position in all four cells. Left to right emotions: (1) smug confident grin; (2) anxious worried with a small sweat drop; (3) happy relieved; (4) devastated shocked. Entire toilet fully contained in its own cell with ample margins. Style: detailed but clearly blocky pixel art, old noir point-and-click adventure game sprites, crisp visibly square pixels, dramatic shadows, muted desaturated charcoal grey and ivory with only subtle muted burgundy accents. Avoid gradients, neon colors, bright hues, text, watermarks, cell borders, background objects, overlap between cells. All eight subjects remain separate, uniformly spaced, accurately aligned to the equal-cell grid. The image must be exactly twice as wide as tall.
 
